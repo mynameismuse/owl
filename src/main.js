@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     if (getStore('session')) {
-      if (to.name === 'login' || to.name === 'register') {
+      if (to.name === 'login' || to.name === 'register' || to.name === 'index') {
         next({path: '/home/mepay'})
       } else {
         next()

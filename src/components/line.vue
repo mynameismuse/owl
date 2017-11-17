@@ -4,7 +4,7 @@
 
     </div>
     <div class="tip-tooltip" v-if="tooltipStatus">
-      <el-tooltip :content="this.item.tooltip" placement="left" effect="dark">
+      <el-tooltip v-if="this.item.tooltip" :content="this.item.tooltip" placement="left" effect="dark">
         <i class="tip-tooltip_icon el-icon-info"></i>
       </el-tooltip>
     </div>
@@ -23,10 +23,10 @@
     props: ['item'],
     computed: {
       tooltipStatus: function () {
-        if (this.item.tooltip) {
-          return true
-        } else {
+        if (typeof this.item.tooltip === 'undefined') {
           return false
+        } else {
+          return true
         }
       }
     },

@@ -29,6 +29,8 @@
   </div>
 </template>
 <script type="text/babel">
+  import {reqRegister} from '../../service/getData'
+
   export default {
     name: 'register',
     data () {
@@ -41,7 +43,8 @@
         password_msg: '',
         repassword: '',
         valid_repassword: false,
-        repassword_msg: ''
+        repassword_msg: '',
+        registerInfo: null
       }
     },
     watch: {
@@ -75,6 +78,23 @@
         if (this.password !== this.repassword) {
           this.repassword_msg = '密码输入不一致'
           this.valid_repassword = true
+        }
+
+        // 用户注册
+        if (!this.valid_username && !this.valid_password) {
+          this.registerInfo = reqRegister(this.username, this.password)
+        } else {
+          return
+        }
+
+        if (this.registerInfo.code === 'F') {
+          this.username_msg = this.registerInfo.msg
+          this.valid_username = true
+          this.password_msg = this.registerInfo.msg
+          this.valid_password = true
+          this.repassword_msg = this.registerInfo.msg
+          this.valid_repassword = true
+        } else {
         }
       }
     }

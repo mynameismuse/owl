@@ -9,11 +9,15 @@ export default {
   [ACCOUNT_LOGIN] (state, info) {
     state.username = info.username
     state.login = true
+    state.user_id = info.user_id
+    state.workspace = info.workspace
     setStore('user_id', info.user_id)
   },
   [ACCOUNT_LOGOUT] (state) {
     state.username = ''
     state.login = false
+    state.user_id = null
+    state.workspace = null
     removeStore(('session'))
   }
 }

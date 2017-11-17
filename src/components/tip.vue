@@ -15,7 +15,7 @@
       <div class="tip-text">
         {{ formatText }}
       </div>
-      <div class="tip-trend" v-bind:class="[trendClass]">
+      <div class="tip-trend" v-if="item.trend" v-bind:class="[trendClass]">
         {{ formatTrend }}
         <i class="trend-icon el-icon-caret-top"></i>
       </div>
@@ -67,7 +67,7 @@
       formatTrend: function () {
         let tmp = parseFloat(this.item.trend).toString()
         if (isNaN(tmp)) {
-          return '0.00' + '%'
+          return false
         } else {
           if (tmp > 0) {
             this.trendClass = 'positive'

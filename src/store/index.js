@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const state = {
   login: false, // User Login Session
   username: '',
-  workspace: null// Username
+  workspace: null, // Username
+  user_id: null
 }
 
 export default new Vuex.Store({
