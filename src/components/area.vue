@@ -1,6 +1,6 @@
 <template>
   <div class="area-container">
-    <div id="area" class="area-wrapper">
+    <div :id="areaId" class="area-wrapper">
 
     </div>
     <div class="tip-tooltip" v-if="tooltipStatus">
@@ -28,6 +28,10 @@
         } else {
           return false
         }
+      },
+      areaId: function () {
+        var tmpId = Math.ceil(Math.random() * 35)
+        return 'area' + tmpId
       }
     },
     methods: {
@@ -42,7 +46,7 @@
           }
         })
         var dafaultMenuItem = highcharts.getOptions().exporting.buttons.contextButton.menuItems
-        highcharts.chart('area', {
+        highcharts.chart(this.areaId, {
           chart: {
             type: 'area'
           },

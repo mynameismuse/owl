@@ -80,6 +80,7 @@
           } else {
           }
         }
+        console.log(this.chartData)
       }
     }
   }

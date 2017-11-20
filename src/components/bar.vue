@@ -1,6 +1,6 @@
 <template>
   <div class="bar-container">
-    <div class="bar-wrapper" id="bar">
+    <div class="bar-wrapper" :id="barId">
 
     </div>
     <div class="tip-tooltip" v-if="tooltipStatus">
@@ -20,7 +20,7 @@
         chart: ''
       }
     },
-    props: ['item'],
+    props: ['item', 'index'],
     computed: {
       tooltipStatus: function () {
         if (this.item.tooltip) {
@@ -28,6 +28,10 @@
         } else {
           return false
         }
+      },
+      barId: function () {
+        var tmpId = Math.ceil(Math.random() * 35)
+        return 'bar' + tmpId
       }
     },
     methods: {
@@ -42,7 +46,7 @@
           }
         })
         var dafaultMenuItem = highcharts.getOptions().exporting.buttons.contextButton.menuItems
-        highcharts.chart('bar', {
+        highcharts.chart(this.barId, {
           chart: {
             type: 'column'
           },

@@ -1,6 +1,6 @@
 <template>
   <div class="line-container">
-    <div id="line" class="line-wrapper">
+    <div :id="lineId" class="line-wrapper">
 
     </div>
     <div class="tip-tooltip" v-if="tooltipStatus">
@@ -28,6 +28,10 @@
         } else {
           return true
         }
+      },
+      lineId: function () {
+        var tmpId = Math.ceil(Math.random() * 35)
+        return 'line' + tmpId
       }
     },
     methods: {
@@ -42,7 +46,7 @@
           }
         })
         var dafaultMenuItem = highcharts.getOptions().exporting.buttons.contextButton.menuItems
-        highcharts.chart('line', {
+        highcharts.chart(this.lineId, {
           title: {
             text: this.item.title,
             align: 'left',

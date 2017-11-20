@@ -1,6 +1,6 @@
 <template>
   <div class="pie-container">
-    <div class="pie-wrapper" id="pie">
+    <div class="pie-wrapper" :id="pieId">
 
     </div>
     <div class="tip-tooltip" v-if="tooltipStatus">
@@ -28,6 +28,10 @@
         } else {
           return false
         }
+      },
+      pieId: function () {
+        var tmpId = Math.ceil(Math.random() * 35)
+        return 'pie' + tmpId
       }
     },
     methods: {
@@ -43,7 +47,7 @@
         })
         var dafaultMenuItem = highcharts.getOptions().exporting.buttons.contextButton.menuItems
 
-        highcharts.chart('pie', {
+        highcharts.chart(this.pieId, {
           chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
