@@ -1,6 +1,7 @@
 import {
   ACCOUNT_LOGIN,
-  ACCOUNT_LOGOUT
+  ACCOUNT_LOGOUT,
+  UPDATE_WORKSPACE
 } from './mutation-types.js'
 
 import {setStore, removeStore} from '../config/mUtils'
@@ -19,5 +20,8 @@ export default {
     state.user_id = null
     state.workspace = null
     removeStore(('session'))
+  },
+  [UPDATE_WORKSPACE] (state, workspace) {
+    state.workspace = workspace
   }
 }

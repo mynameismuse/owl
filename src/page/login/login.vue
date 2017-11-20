@@ -26,7 +26,7 @@
 	</div>
 </template>
 <script type="text/babel">
-import {reqLogin} from '../../service/getData'
+import {reqLogin, reqJoin} from '../../service/getData'
 import {mapMutations} from 'vuex'
 
 export default {
@@ -52,9 +52,10 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'ACCOUNT_LOGIN'
+      'ACCOUNT_LOGIN',
+      'UPDATE_WORKSPACE'
     ]),
-    submit: function () {
+    async submit () {
       // 校验表单输入
       if (this.username === '') {
         this.username_msg = '用户名不能为空'
@@ -85,9 +86,10 @@ export default {
         this.valid_username = false
         this.valid_password = false
         this.ACCOUNT_LOGIN(this.userInfo)
-        if (this.userInfo.workspace === null) {
-          this.$router.push({name: 'joinTeam'})
-        }
+
+        this.workspaceInfo = await reqJoin(this.$store.username, this.workspace)
+        this.UPDATE_WORKSPACE(this.workspaceInfo.data)
+        this.$router.push({name: 'home', params: {id: this.workspaceInfo.data[0].dataViewId}})
       } else {
         this.username_msg = '未知错误'
         this.valid_username = true

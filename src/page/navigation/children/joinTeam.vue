@@ -17,6 +17,8 @@
 </template>
 <script type="text/babel">
 import {reqJoin} from '../../../service/getData'
+import {mapMutations} from 'vuex'
+
 export default {
   name: 'joinTeam',
   data () {
@@ -40,23 +42,26 @@ export default {
     }
   },
   methods: {
-    join: function () {
+    ...mapMutations([
+      'UPDATE_WORKSPACE'
+    ]),
+    async join () {
       // 校验表单输入
       if (this.workspace === '') {
         this.valid_workspace = true
         this.workspace_msg = this.emptyMsg
       } else {
-        this.workspaceInfo = reqJoin(this.$store.username, this.workspace)
-        console.log(this.workspaceInfo)
+        this.workspaceInfo = await reqJoin(this.$store.username, this.workspace)
       }
-
       // 根据返回值判断是否加入成功
       if (this.workspaceInfo.code === 'F') {
         this.valid_workspace = true
         this.workspace_msg = this.workspaceInfo.msg
       } else {
         this.valid_workspace = false
-        this.$router.push({name: 'home', params: {id: 'mepay'}})
+        this.UPDATE_WORKSPACE(this.workspaceInfo.data)
+        console.log(this.workspaceInfo.data[0].dataViewId)
+        this.$router.push({name: 'home', params: {id: this.workspaceInfo.data[0].dataViewId}})
       }
     }
   }

@@ -4,11 +4,11 @@
     <div class="homeWrapper">
       <div class="container clearfix">
         <calendar></calendar>
-        <tip v-for="tip in chartData.tips" v-bind:item="tip"></tip>
-        <lineChart v-for="line in chartData.line" v-bind:item="line"></lineChart>
-        <areaChart v-for="area in chartData.area" v-bind:item="area"></areaChart>
-        <barChart v-for="bar in chartData.bar" v-bind:item="bar"></barChart>
-        <pieChart v-for="pie in chartData.pie" v-bind:item="pie"></pieChart>
+        <tip v-for="(tipItem, index) in chartData.tips" v-bind:item="tipItem" :key="index"></tip>
+        <lineChart v-for="(lineItem, index) in chartData.line" v-bind:item="lineItem" :key="index"></lineChart>
+        <areaChart v-for="(areaItem, index) in chartData.area" v-bind:item="areaItem" :key="index"></areaChart>
+        <barChart v-for="(barItem, index) in chartData.bar" v-bind:item="barItem" :key="index"></barChart>
+        <pieChart v-for="(pieItem, index) in chartData.pie" v-bind:item="pieItem" :key="index"></pieChart>
       </div>
     </div>
   </div>
@@ -22,7 +22,8 @@
   import barChart from '../../components/bar'
   import pieChart from '../../components/pie'
 
-  import {reqData, reqMepay} from '../../service/getData'
+  import {reqJoin, reqData} from '../../service/getData'
+  import {mapMutations, mapState} from 'vuex'
 
   export default {
     name: 'home',
@@ -41,6 +42,11 @@
       barChart,
       pieChart
     },
+    computed: {
+      ...mapState([
+        'workspace'
+      ])
+    },
     mounted () {
       this.initData()
     },
@@ -50,16 +56,25 @@
       }
     },
     methods: {
+      ...mapMutations([
+        'UPDATE_WORKSPACE'
+      ]),
+      async initNav () {
+        this.workspaceInfo = await reqJoin(this.$store.username, this.workspace)
+        this.UPDATE_WORKSPACE(this.workspaceInfo.data)
+      },
       async initData () {
-        if (this.id === 'mepay') {
-          let tmp = await reqMepay(this.$store.username, this.$store.workspace, this.id)
+        if (this.id === 'empty') {
+          this.initNav()
+          let req = 'dataViewId=' + this.workspace[0].dataViewId
+          let tmp = await reqData(req)
           if (tmp.code === 'S') {
-            console.log(tmp)
             this.chartData = tmp.data
           } else {
           }
         } else {
-          let tmp = await reqData(this.$store.username, this.$store.workspace, this.id)
+          let req = 'dataViewId=' + this.id
+          let tmp = await reqData(req)
           if (tmp.code === 'S') {
             this.chartData = tmp.data
           } else {

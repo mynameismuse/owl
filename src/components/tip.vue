@@ -13,7 +13,7 @@
         {{ item.subtitle }}
       </div>
       <div class="tip-text">
-        {{ formatText }}
+        {{ item.text }}
       </div>
       <div class="tip-trend" v-if="item.trend" v-bind:class="[trendClass]">
         {{ formatTrend }}

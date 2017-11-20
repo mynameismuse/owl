@@ -7,10 +7,7 @@
           Owl
         </div>
         <ul class="right menu">
-          <router-link to="/home/mepay" tag="li" class="item">行销设备</router-link>
-          <router-link to="/home/bcc" tag="li" class="item">自有厅归集</router-link>
-          <router-link to="/home/ecfront" tag="li" class="item">电渠</router-link>
-          <router-link to="/home/mini" tag="li" class="item">MINI厅</router-link>
+          <router-link v-for="item in workspace" :to="{ name: 'home', params: { id: item.dataViewId }}" tag="li" class="item" :key="item.dataViewId">{{ item.dataViewName }}</router-link>
           <li class="item" v-on:click="logout">退出登录</li>
         </ul>
       </div>
@@ -18,7 +15,8 @@
   </div>
 </template>
 <script type="text/babel">
-  import {mapMutations} from 'vuex'
+  import {mapMutations, mapState} from 'vuex'
+  import {reqJoin} from '../../../service/getData'
 
   export default {
     name: 'homeNav',
@@ -26,13 +24,28 @@
       return {
       }
     },
+    computed: {
+      ...mapState([
+        'workspace'
+      ])
+    },
     methods: {
       ...mapMutations([
-        'ACCOUNT_LOGOUT'
+        'ACCOUNT_LOGOUT',
+        'UPDATE_WORKSPACE'
       ]),
       logout: function () {
         this.ACCOUNT_LOGOUT()
         this.$router.push({name: 'login'})
+      },
+      async initNav () {
+        this.workspaceInfo = await reqJoin(this.$store.username, this.workspace)
+        this.UPDATE_WORKSPACE(this.workspaceInfo.data)
+      }
+    },
+    created () {
+      if (this.workspace === null) {
+        this.initNav()
       }
     }
   }
@@ -90,6 +103,12 @@
         transition: all .1s linear;
 
         &:hover {
+          opacity: 1;
+          color: @orange;
+          border-bottom: 3px solid @orange;
+        }
+
+        &.router-link-active {
           opacity: 1;
           color: @orange;
           border-bottom: 3px solid @orange;

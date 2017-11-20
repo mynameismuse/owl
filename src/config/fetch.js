@@ -52,7 +52,8 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 
       let sendData = ''
       if (type === 'POST') {
-        sendData = JSON.stringify(data)
+        sendData = data.data
+        // sendData = 'dataViewId=15108834301456994'
       }
 
       requestObj.open(type, url, true)
