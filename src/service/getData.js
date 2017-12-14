@@ -64,3 +64,26 @@ export const reqData = (data) => fetch('/dataview/querydataviewdetails', {data},
 
 export const reqMepay = () => fetch('/dataview/mepaydata', {
 }, 'POST', 'test')
+
+/**
+ * 请求监控错误列表
+ * @param data
+ */
+export const reqMonitorError = (data) => fetch('/monitor/monitorresult', {data}, 'POST', 'test')
+
+/**
+ * 请求树状图列表
+ */
+export const reqMonitors = () => fetch('/monitor/monitors', {}, 'POST', 'test')
+
+/**
+ * 请求监控成功列表
+ * @param data
+ */
+export const reqMonitorSuccess = (data) => fetch('/monitor/monitorresult', {data}, 'POST', 'test')
+
+/**
+ * 请求执行脚本
+ * @param data
+ */
+export const reqMonitorCommad = (data) => fetch('/monitor/monitorcommand', {data}, 'POST', 'test')

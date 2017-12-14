@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-container">
+  <el-col :lg="6" :md="12" :sm="24">
     <div class="calendar-wrapper">
       <div class="calendar-title">
         {{ title }}
@@ -10,7 +10,7 @@
         </div>
         <div class="calendar-content">
           <div class="calendar-subsitle">
-            {{ date.getFullYear() }} 年 {{ date.getMonth() }} 月 {{ date.getDay() }} 日
+            {{ date.getFullYear() }} 年 {{ date.getMonth() + 1 }} 月 {{ date.getDate() }} 日
           </div>
           <div class="calendar-time">
             {{ date.getHours() }} : {{ formatMinute }} : {{ formatSeconds }}
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </el-col>
 </template>
 <script type="text/babel">
   export default {
@@ -70,11 +70,8 @@
   @import "../style/setting.less";
   @import "../style/common.less";
 
-  .calendar-container {
-    width: 25%;
+  .el-col {
     padding: 20px 20px;
-    box-sizing: border-box;
-    float: left;
     min-height: 250px;
 
     .calendar-wrapper {

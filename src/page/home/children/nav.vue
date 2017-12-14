@@ -8,6 +8,7 @@
         </div>
         <ul class="right menu">
           <router-link v-for="item in workspace" :to="{ name: 'home', params: { id: item.dataViewId }}" tag="li" class="item" :key="item.dataViewId">{{ item.dataViewName }}</router-link>
+          <router-link :to="{ name: 'monitor'}" tag="li" class="item">监控</router-link>
           <li class="item" v-on:click="logout">退出登录</li>
         </ul>
       </div>

@@ -6,6 +6,7 @@ import navigation from '@/page/navigation/navigation'
 import createTeam from '@/page/navigation/children/createTeam'
 import joinTeam from '@/page/navigation/children/joinTeam'
 import home from '@/page/home/home'
+import monitor from '@/page/monitor/monitor'
 
 Vue.use(Router)
 
@@ -39,6 +40,16 @@ export default new Router({
       path: '/home/:id',
       name: 'home',
       component: home,
+      props: true,
+      force: true,
+      meta: {
+        auth: true
+      }
+    },
+    {
+      path: '/monitor',
+      name: 'monitor',
+      component: monitor,
       props: true,
       force: true,
       meta: {

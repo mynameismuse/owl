@@ -1,5 +1,5 @@
 <template>
-  <div class="bar-container">
+  <el-col :lg="12" :md="12" :sm="24">
     <div class="bar-wrapper" :id="barId">
 
     </div>
@@ -8,7 +8,7 @@
         <i class="tip-tooltip_icon el-icon-info"></i>
       </el-tooltip>
     </div>
-  </div>
+  </el-col>
 </template>
 <script type="text/babel">
   import highcharts from 'highcharts'
@@ -146,12 +146,9 @@
   @import "../style/setting.less";
   @import "../style/common.less";
 
-  .bar-container {
-     width: 50%;
+  .el-col {
      padding: 20px 20px;
-     box-sizing: border-box;
-     float: left;
-     position: relative;
+    position: relative;
 
      .bar-wrapper  {
        transition: all .2s linear;

@@ -1,5 +1,5 @@
 <template>
-  <div class="tip-container">
+  <el-col :lg="6" :md="12" :sm="24">
     <div class="tip-wrapper">
       <div class="tip-title">
         {{ item.title }}
@@ -23,7 +23,7 @@
         {{ item.desc }}
       </div>
     </div>
-  </div>
+  </el-col>
 </template>
 <script type="text/babel">
   export default {
@@ -87,11 +87,8 @@
   @import "../style/setting.less";
   @import "../style/common.less";
 
-  .tip-container {
-    width: 25%;
+  .el-col {
     padding: 20px 20px;
-    box-sizing: border-box;
-    float: left;
     min-height: 250px;
 
     .tip-wrapper {

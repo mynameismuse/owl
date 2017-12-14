@@ -3,12 +3,14 @@
     <homeNav></homeNav>
     <div class="homeWrapper">
       <div class="container clearfix">
-        <calendar></calendar>
-        <tip v-for="(tipItem, index) in chartData.tips" v-bind:item="tipItem" :key="index"></tip>
-        <lineChart v-for="(lineItem, index) in chartData.line" v-bind:item="lineItem" :key="index"></lineChart>
-        <areaChart v-for="(areaItem, index) in chartData.area" v-bind:item="areaItem" :key="index"></areaChart>
-        <barChart v-for="(barItem, index) in chartData.bar" v-bind:item="barItem" :key="index"></barChart>
-        <pieChart v-for="(pieItem, index) in chartData.pie" v-bind:item="pieItem" :key="index"></pieChart>
+        <el-row :gutter="20">
+          <calendar></calendar>
+          <tip v-for="(tipItem, index) in chartData.tips" v-bind:item="tipItem" :key="index"></tip>
+          <lineChart v-for="(lineItem, index) in chartData.line" v-bind:item="lineItem" :key="index"></lineChart>
+          <areaChart v-for="(areaItem, index) in chartData.area" v-bind:item="areaItem" :key="index"></areaChart>
+          <barChart v-for="(barItem, index) in chartData.bar" v-bind:item="barItem" :key="index"></barChart>
+          <pieChart v-for="(pieItem, index) in chartData.pie" v-bind:item="pieItem" :key="index"></pieChart>
+        </el-row>
       </div>
     </div>
   </div>
@@ -29,7 +31,13 @@
     name: 'home',
     data () {
       return {
-        chartData: null
+        chartData: {
+          tips: [],
+          line: [],
+          area: [],
+          bar: [],
+          pie: []
+        }
       }
     },
     props: ['id'],
@@ -66,6 +74,8 @@
       async initData () {
         if (this.id === 'empty') {
           this.initNav()
+          this.workspaceInfo = await reqJoin(this.$store.username, this.workspace)
+          this.UPDATE_WORKSPACE(this.workspaceInfo.data)
           let req = 'dataViewId=' + this.workspace[0].dataViewId
           let tmp = await reqData(req)
           if (tmp.code === 'S') {
@@ -80,7 +90,6 @@
           } else {
           }
         }
-        console.log(this.chartData)
       }
     }
   }
