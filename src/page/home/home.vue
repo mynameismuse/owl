@@ -25,6 +25,7 @@
   import pieChart from '../../components/pie'
 
   import {reqJoin, reqData} from '../../service/getData'
+  import {isSuccess} from '../../config/mUtils'
   import {mapMutations, mapState} from 'vuex'
 
   export default {
@@ -78,16 +79,46 @@
           this.UPDATE_WORKSPACE(this.workspaceInfo.data)
           let req = 'dataViewId=' + this.workspace[0].dataViewId
           let tmp = await reqData(req)
-          if (tmp.code === 'S') {
+          if (isSuccess(tmp.code)) {
             this.chartData = tmp.data
+            this.$notify({
+              title: '初始化数据',
+              message: '刷新成功',
+              type: 'success',
+              duration: 2000,
+              position: 'bottom-right'
+            })
           } else {
+            this.$notify({
+              title: '初始化数据',
+              message: '刷新失败',
+              type: 'error',
+              duration: 2000,
+              position: 'bottom-right'
+            })
           }
         } else {
           let req = 'dataViewId=' + this.id
           let tmp = await reqData(req)
-          if (tmp.code === 'S') {
-            this.chartData = tmp.data
+          if (isSuccess(tmp.code)) {
+            if (tmp.data !== undefined) {
+              this.chartData = tmp.data
+            }
+            this.$notify({
+              title: '初始化数据',
+              message: '刷新成功',
+              type: 'success',
+              duration: 2000,
+              position: 'bottom-right'
+            })
           } else {
+            this.$notify({
+              title: '初始化数据',
+              message: '刷新失败',
+              type: 'error',
+              duration: 2000,
+              position: 'bottom-right'
+            })
           }
         }
       }

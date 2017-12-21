@@ -7,6 +7,8 @@ import createTeam from '@/page/navigation/children/createTeam'
 import joinTeam from '@/page/navigation/children/joinTeam'
 import home from '@/page/home/home'
 import monitor from '@/page/monitor/monitor'
+import monitorCard from '@/page/monitor/children/monitorCard'
+import monitorDetail from '@/page/monitor/children/monitorDetail'
 
 Vue.use(Router)
 
@@ -50,11 +52,29 @@ export default new Router({
       path: '/monitor',
       name: 'monitor',
       component: monitor,
-      props: true,
-      force: true,
       meta: {
         auth: true
-      }
+      },
+      children: [
+        {
+          path: 'monitor/monitorCard',
+          name: 'monitorCard',
+          component: monitorCard,
+          meta: {
+            auth: true
+          }
+        },
+        {
+          path: 'monitor/:viewId/:infoId/:detailId/:viewName/:infoName/:detailName',
+          name: 'monitorDetail',
+          component: monitorDetail,
+          force: true,
+          props: true,
+          meta: {
+            auth: true
+          }
+        }
+      ]
     },
     {
       path: '/navigation',

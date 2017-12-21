@@ -39,3 +39,16 @@ export const parseReq = (obj) => {
   }
   return result
 }
+
+/**
+ * 验证结果是否成功
+ * @param code
+ * @returns {boolean}
+ */
+export const isSuccess = (code) => {
+  if (code === 'S' || code === 0) {
+    return true
+  } else {
+    return false
+  }
+}
