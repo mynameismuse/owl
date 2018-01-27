@@ -3,6 +3,7 @@
     <div class="container dark">
       <div class="monitorDetail-header">
         <span class="monitorDetail-header_title">{{this.detailName}} ({{this.infoName}} <- {{this.viewName}})</span>
+        <el-button class="monitorDetail-header_button" size="small" type="primary" v-on:click="reExce">重新执行</el-button>
         <el-button class="monitorDetail-header_button" size="small" icon="el-icon-refresh" type="success" v-on:click="refresh">刷新列表</el-button>
       </div>
     </div>
@@ -30,15 +31,12 @@
             label="ip地址 (ip)">
           </el-table-column>
           <el-table-column
-            prop="describe"
-            label="描述 (describe)">
-          </el-table-column>
-          <el-table-column
-            prop="刷新时间"
+            prop="refreshTime"
             label="刷新时间 (refreshTime)">
           </el-table-column>
           <el-table-column
             prop="state"
+            :formatter="format"
             label="状态 (state)">
           </el-table-column>
         </el-table>
@@ -64,15 +62,12 @@
             label="ip地址 (ip)">
           </el-table-column>
           <el-table-column
-            prop="describe"
-            label="描述 (describe)">
-          </el-table-column>
-          <el-table-column
-            prop="刷新时间"
+            prop="refreshTime"
             label="刷新时间 (refreshTime)">
           </el-table-column>
           <el-table-column
             prop="state"
+            :formatter="format"
             label="状态 (state)">
           </el-table-column>
         </el-table>
@@ -81,7 +76,7 @@
   </div>
 </template>
 <script type="text/babel">
-  import {reqMonitorSuccess} from '../../../service/getData'
+  import {reqMonitorSuccess, reqMonitorCommad} from '../../../service/getData'
   import {isSuccess, parseReq} from '../../../config/mUtils'
 
   export default {
@@ -96,6 +91,13 @@
       this.initData()
     },
     methods: {
+      format (row, column, cellValue) {
+        if (cellValue === '0') {
+          return '成功'
+        } else {
+          return '失败'
+        }
+      },
       async initData () {
         let success = await reqMonitorSuccess(parseReq({
           'monitorViewId': this.viewId,
@@ -118,6 +120,39 @@
       },
       refresh () {
         this.initData()
+      },
+      async reExce () {
+        let result = await reqMonitorCommad(parseReq({
+          'monitorViewId': this.viewId,
+          'monitorInfoId': this.infoId,
+          'monitorDetailId': this.detailId
+        }))
+        if (isSuccess(result.code)) {
+          this.$notify({
+            title: '执行任务',
+            message: '执行成功',
+            type: 'success',
+            duration: 2000,
+            position: 'bottom-right'
+          })
+          this.failList = []
+          this.successList = []
+          result.data.forEach(item => {
+            if (item.state === '0') {
+              this.successList.push(item)
+            } else {
+              this.failList.push(item)
+            }
+          })
+        } else {
+          this.$notify({
+            title: '执行任务',
+            message: '执行失败',
+            type: 'error',
+            duration: 2000,
+            position: 'bottom-right'
+          })
+        }
       }
     }
   }

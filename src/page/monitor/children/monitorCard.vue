@@ -21,8 +21,8 @@
 <script type="text/babel">
   import homeNav from '../../home/children/nav'
   import monitorCard from '../../../components/monitorCard'
-  import {reqMonitors, reqMonitorSuccess} from '../../../service/getData'
-  import {isSuccess, parseReq} from '../../../config/mUtils'
+  import {reqMonitors} from '../../../service/getData'
+  import {isSuccess} from '../../../config/mUtils'
 
   export default {
     data () {
@@ -40,6 +40,7 @@
     methods: {
       async initData () {
         let result = await reqMonitors()
+        console.log(result)
         if (isSuccess(result.code)) {
           this.monitorList = []
           if (result.data.length > 0) {
@@ -47,33 +48,7 @@
               if (first.monitorInfos.length > 0) {
                 first.monitorInfos.forEach(second => {
                   if (second.monitorDetails.length > 0) {
-                    second.monitorDetails.forEach(async third => {
-                      let fails = await reqMonitorSuccess(parseReq({
-                        'monitorViewId': first.monitorViewId,
-                        'monitorInfoId': second.monitorInfoId,
-                        'monitorDetailId': third.monitorDetailId,
-                        'monitorState': '0'
-                      }))
-                      if (isSuccess(fails.code)) {
-                        if (typeof fails.data === 'undefined') {
-                          fails = []
-                        } else {
-                          fails = fails.data
-                        }
-                      }
-                      let successes = await reqMonitorSuccess(parseReq({
-                        'monitorViewId': first.monitorViewId,
-                        'monitorInfoId': second.monitorInfoId,
-                        'monitorDetailId': third.monitorDetailId,
-                        'monitorState': '1'
-                      }))
-                      if (isSuccess(successes.code)) {
-                        if (typeof successes.data === 'undefined') {
-                          successes = []
-                        } else {
-                          successes = successes.data
-                        }
-                      }
+                    second.monitorDetails.forEach(third => {
                       this.monitorList.push({
                         monitorViewId: first.monitorViewId,
                         monitorViewName: first.monitorViewName,
@@ -81,8 +56,9 @@
                         monitorInfoName: second.monitorInfoName,
                         monitorDetailId: third.monitorDetailId,
                         monitorDetailName: third.monitorDetailName,
-                        fails: fails,
-                        successes: successes
+                        fails: third.errorCount,
+                        successes: third.correctCount,
+                        total: third.totalCount
                       })
                     })
                   }

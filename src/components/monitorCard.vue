@@ -8,23 +8,23 @@
         {{this.item.monitorViewName}} => {{this.item.monitorInfoName}}
       </div>
       <div class="monitorCard-success">
-        <div class="monitorCard-success-header">成功: ( {{this.item.successes.length}} / {{total}} )</div>
+        <div class="monitorCard-success-header">成功: ( {{item.successes}} / {{item.total}} )</div>
         <el-progress :text-inside="true" :stroke-width="18" :percentage="successPerc" status="success"></el-progress>
       </div>
       <div class="monitorCard-error">
-        <div class="monitorCard-error-header">失败: ( {{this.item.fails.length}} / {{total}} )</div>
+        <div class="monitorCard-error-header">失败: ( {{item.fails}} / {{item.total}} )</div>
         <el-progress :text-inside="true" :stroke-width="18" :percentage="failPerc" status="exception"></el-progress>
       </div>
       <div class="monitorCard-actions">
         <el-button type="primary" size="small" v-on:click="reExce">重新执行</el-button>
-        <el-button type="info" size="small" v-on:click="routeDetail">查看细节</el-button>
+        <el-button type="info" size="small" v-on:click="routeDetail">查看明细</el-button>
       </div>
     </div>
   </el-col>
 </template>
 <script type="text/babel">
   import {reqMonitorCommad} from '../service/getData'
-  import {parseReq} from '../config/mUtils'
+  import {parseReq, isSuccess} from '../config/mUtils'
 
   export default {
     data () {
@@ -33,14 +33,19 @@
     },
     props: ['item'],
     computed: {
-      total: function () {
-        return this.item.fails.length + this.item.successes.length
-      },
       successPerc: function () {
-        return Math.round(this.item.successes.length / (this.item.fails.length + this.item.successes.length) * 100)
+        if (this.item.fails + this.item.successes === 0) {
+          return 0
+        } else {
+          return Math.round(this.item.successes / (this.item.fails + this.item.successes) * 100)
+        }
       },
       failPerc: function () {
-        return Math.round(this.item.fails.length / (this.item.fails.length + this.item.successes.length) * 100)
+        if (this.item.fails + this.item.successes === 0) {
+          return 0
+        } else {
+          return Math.round(this.item.fails / (this.item.fails + this.item.successes) * 100)
+        }
       }
     },
     methods: {
@@ -50,7 +55,34 @@
           'monitorInfoId': this.item.monitorInfoId,
           'monitorDetailId': this.item.monitorDetailId
         }))
-        console.log(result)
+        if (isSuccess(result.code)) {
+          this.$notify({
+            title: '执行任务',
+            message: '执行成功',
+            type: 'success',
+            duration: 2000,
+            position: 'bottom-right'
+          })
+          let failsNum = 0
+          let successesNum = 0
+          result.data.forEach(item => {
+            if (item.state === '0') {
+              successesNum++
+            } else {
+              failsNum++
+            }
+          })
+          this.item.fails = failsNum
+          this.item.successes = successesNum
+        } else {
+          this.$notify({
+            title: '执行任务',
+            message: '执行失败',
+            type: 'error',
+            duration: 2000,
+            position: 'bottom-right'
+          })
+        }
       },
       async routeDetail () {
         this.$router.push(
